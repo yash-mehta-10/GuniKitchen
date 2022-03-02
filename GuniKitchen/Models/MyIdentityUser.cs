@@ -22,5 +22,9 @@ namespace GuniKitchen.Models
         [Display(Name = "Gender")]
         [Required(ErrorMessage = "{0} cannot be empty.")]
         public string Gender { get; set; }
+
+        [Display(Name = "Is Admin?")]
+        [Required]
+        public bool IsAdmin { get; set; }
     }
 }

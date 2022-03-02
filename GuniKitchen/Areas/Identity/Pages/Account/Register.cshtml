@@ -47,9 +47,14 @@
                 <select asp-for="Input.Gender" class="form-control">
                   <option value="Male">Male</option>
                   <option value="Female">Female</option>
-                  <option value="Other">other</option>
+                  <option value="Other">Other</option>
                 </select>
                 <span asp-validation-for="Input.Gender" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.IsAdmin"></label>
+                <input asp-for="Input.IsAdmin" class="form-control" />
+                <span asp-validation-for="Input.IsAdmin" class="text-danger"></span>
             </div>
             <hr />
             <button type="submit" class="btn btn-primary">Register</button>

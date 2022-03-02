@@ -4,14 +4,16 @@ using GuniKitchen.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GuniKitchen.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220302114450_producttypeforignkey2")]
+    partial class producttypeforignkey2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -153,6 +155,7 @@ namespace GuniKitchen.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<double>("ProductPrice")
+                        .HasMaxLength(10)
                         .HasColumnType("float");
 
                     b.Property<string>("ProductSize")
@@ -161,9 +164,8 @@ namespace GuniKitchen.Migrations
                         .HasColumnType("nvarchar(20)")
                         .HasColumnName("varchar");
 
-                    b.Property<string>("ProductType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("ProductType")
+                        .HasColumnType("int");
 
                     b.HasKey("ProductId");
 

@@ -79,6 +79,10 @@ namespace GuniKitchen.Areas.Identity.Pages.Account
             [Display(Name = "Phone Number")]
             [Required(ErrorMessage = "{0} cannot be empty.")]
             public string PhoneNumber { get; set; }
+
+            [Display(Name = "Is Admin?")]
+            [Required]
+            public bool IsAdmin { get; set; }
         }
 
         public async Task OnGetAsync(string returnUrl = null)
@@ -93,7 +97,7 @@ namespace GuniKitchen.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                var user = new MyIdentityUser { UserName = Input.Email, Email = Input.Email, DisplayName = Input.DisplayName, DateOfBirth = Input.DateOfBirth, Gender = Input.Gender, PhoneNumber = Input.PhoneNumber };
+                var user = new MyIdentityUser { UserName = Input.Email, Email = Input.Email, DisplayName = Input.DisplayName, DateOfBirth = Input.DateOfBirth, Gender = Input.Gender, PhoneNumber = Input.PhoneNumber, IsAdmin = Input.IsAdmin };
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {

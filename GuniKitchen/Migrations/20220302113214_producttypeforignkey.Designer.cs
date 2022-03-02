@@ -4,14 +4,16 @@ using GuniKitchen.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GuniKitchen.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220302113214_producttypeforignkey")]
+    partial class producttypeforignkey
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -153,6 +155,7 @@ namespace GuniKitchen.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<double>("ProductPrice")
+                        .HasMaxLength(10)
                         .HasColumnType("float");
 
                     b.Property<string>("ProductSize")
@@ -161,11 +164,13 @@ namespace GuniKitchen.Migrations
                         .HasColumnType("nvarchar(20)")
                         .HasColumnName("varchar");
 
-                    b.Property<string>("ProductType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("ProductType")
+                        .HasColumnType("int");
 
                     b.HasKey("ProductId");
+
+                    b.HasIndex("ProductType")
+                        .IsUnique();
 
                     b.ToTable("Products");
                 });
@@ -287,6 +292,17 @@ namespace GuniKitchen.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("GuniKitchen.Models.Product", b =>
+                {
+                    b.HasOne("GuniKitchen.Models.ProductType", "Types")
+                        .WithOne("Product")
+                        .HasForeignKey("GuniKitchen.Models.Product", "ProductType")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Types");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
                 {
                     b.HasOne("GuniKitchen.Models.MyIdentityRole", null)
@@ -336,6 +352,11 @@ namespace GuniKitchen.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("GuniKitchen.Models.ProductType", b =>
+                {
+                    b.Navigation("Product");
                 });
 #pragma warning restore 612, 618
         }
