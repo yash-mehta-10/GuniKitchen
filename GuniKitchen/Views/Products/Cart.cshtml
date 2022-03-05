@@ -1,0 +1,39 @@
+﻿@model IEnumerable<GuniKitchen.Models.Product>
+
+@{
+    ViewData["Title"] = "Cart";
+}
+
+<h1>Cart</h1>
+
+<h1>Your Cart</h1>
+
+<br/>
+<div class="row">
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>Image</th>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Product Type</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <img src="~/@item.ProductImage" width="200px" height="150px"/>
+                </td>
+                <td>@item.ProductName</td>
+                <td>@item.ProductPrice</td>
+                <td>@item.ProductType.ProductTypes</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>
+
+

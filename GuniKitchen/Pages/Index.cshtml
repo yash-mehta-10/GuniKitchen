@@ -1,10 +1,101 @@
 ﻿@page
+@using GuniKitchen.Models
 @model IndexModel
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<MyIdentityUser> SignInManager
+@inject UserManager<MyIdentityUser> UserManager
 @{
     ViewData["Title"] = "Home page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<br/><br/>
+@if (!SignInManager.IsSignedIn(User))
+{
+    <h3>Welcome to our GuniKitchen</h3>
+    <p>We have verity of Burgers and Pizzas, Which are very Delicious.</p>
+    <div id="carouselExampleControls" class="carousel slide d-block w-" data-bs-ride="carousel">
+  <div class="carousel-inner">
+    <div class="carousel-item active">
+      <img src="~/images/welcome1.jpg" class="d-block w-100" alt="img1">
+    </div>
+    <div class="carousel-item">
+      <img src="~/images/welcome2.jpg" class="d-block w-100" alt="img1">
+    </div>
+    <div class="carousel-item">
+      <img src="~/images/welcome3.jpg" class="d-block w-100" alt="img1">
+    </div>
+    <div class="carousel-item">
+      <img src="~/images/welcome4.jpg" class="d-block w-100" alt="img1">
+    </div>
+  </div>
+  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Next</span>
+  </button>
 </div>
+}
+else
+{
+    <h3>Burger</h3>
+    <div class="row">
+        @foreach (var product in Model.Product)
+        {
+            @if (product.ProductTypeId==1)
+           {
+               <div class="col-3">
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            <h4 class="my-0 font-weight-normal">
+                                <label>@product.ProductName</label>
+                            </h4>
+                        </div>
+                        <img src="~/@product.ProductImage" alt="Card Image" class="card-img-top" style="height: 200px;"/>
+                        <div class="card-header">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="btn-group">
+                                    <label><b>Price : @product.ProductPrice</b></label>
+                                </div>
+                                <a asp-action="Details" asp-controller="Products" asp-route-id="@product.ProductId" class="btn btn-primary">Details</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+           }
+        }
+    </div>
+    <br/><br/>
+    <hr />
+    <br/><br/>
+    <h3>Pizza</h3>
+    <div class="row">
+        @foreach (var product in Model.Product)
+        {
+            @if (product.ProductTypeId==3)
+           {
+               <div class="col-3">
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            <h4 class="my-0 font-weight-normal">
+                                <label>@product.ProductName</label>
+                            </h4>
+                        </div>
+                        <img src="~/@product.ProductImage" alt="Card Image" class="card-img-top" style="height: 200px;"/>
+                        <div class="card-header">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="btn-group">
+                                    <label><b>Price : @product.ProductPrice</b></label>
+                                </div>
+                                <a asp-action="Details" asp-controller="Products" asp-route-id="@product.ProductId" class="btn btn-primary">Details</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+           }
+        }
+    </div>
+}
+

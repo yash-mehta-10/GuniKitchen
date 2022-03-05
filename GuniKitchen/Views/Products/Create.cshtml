@@ -34,16 +34,12 @@
             </div>
             <div class="form-group">
                 <label asp-for="ProductImage" class="control-label"></label>
-                <input asp-for="ProductImage" class="form-control" />
+                <input asp-for="ProductImage" class="form-control" type="file"/>
                 <span asp-validation-for="ProductImage" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ProductType" class="control-label"></label>
-                <select asp-for="ProductType" class="form-control">
-                  <option value="Burger">Burger</option>
-                  <option value="Pizza">Pizza</option>
-                </select>
-                <span asp-validation-for="ProductType" class="text-danger"></span>
+                <label asp-for="ProductTypeId" class="control-label"></label>
+                <select asp-for="ProductTypeId" class ="form-control" asp-items="ViewBag.ProductTypeId"></select>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
@@ -53,9 +49,6 @@
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index" class="btn btn-primary">Back to List</a>
 </div>
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}

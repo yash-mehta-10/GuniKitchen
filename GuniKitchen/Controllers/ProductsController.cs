@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using GuniKitchen.Data;
 using GuniKitchen.Models;
+using GuniKitchen.Utility;
 
 namespace GuniKitchen.Controllers
 {
@@ -22,7 +23,8 @@ namespace GuniKitchen.Controllers
         // GET: Products
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Products.ToListAsync());
+            var applicationDbContext = _context.Products.Include(p => p.ProductType);
+            return View(await applicationDbContext.ToListAsync());
         }
 
         // GET: Products/Details/5
@@ -34,6 +36,7 @@ namespace GuniKitchen.Controllers
             }
 
             var product = await _context.Products
+                .Include(p => p.ProductType)
                 .FirstOrDefaultAsync(m => m.ProductId == id);
             if (product == null)
             {
@@ -43,9 +46,38 @@ namespace GuniKitchen.Controllers
             return View(product);
         }
 
+        [HttpPost]
+        [ActionName("Details")]
+        public async Task<IActionResult> ProductDetail(int? id)
+        {
+            List<Product> products = new List<Product>();
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var product = _context.Products.Include(c => c.ProductType).FirstOrDefault(c => c.ProductId == id);
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            products = HttpContext.Session.Get<List<Product>>("products");
+            if (products == null)
+            {
+                products = new List<Product>();
+            }
+            products.Add(product);
+            HttpContext.Session.Set("products", products);
+
+            return View(product);
+        }
+
+
         // GET: Products/Create
         public IActionResult Create()
         {
+            ViewData["ProductTypeId"] = new SelectList(_context.ProductTypes, "Id", "ProductTypes");
             return View();
         }
 
@@ -54,14 +86,16 @@ namespace GuniKitchen.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ProductId,ProductName,ProductDesc,ProductSize,ProductPrice,ProductImage,ProductType")] Product product)
+        public async Task<IActionResult> Create([Bind("ProductId,ProductName,ProductDesc,ProductSize,ProductPrice,ProductImage,ProductTypeId")] Product product)
         {
             if (ModelState.IsValid)
             {
+                product.ProductImage = "images/" + product.ProductImage;
                 _context.Add(product);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["ProductTypeId"] = new SelectList(_context.ProductTypes, "Id", "ProductTypes", product.ProductTypeId);
             return View(product);
         }
 
@@ -78,6 +112,7 @@ namespace GuniKitchen.Controllers
             {
                 return NotFound();
             }
+            ViewData["ProductTypeId"] = new SelectList(_context.ProductTypes, "Id", "ProductTypes", product.ProductTypeId);
             return View(product);
         }
 
@@ -86,7 +121,7 @@ namespace GuniKitchen.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ProductId,ProductName,ProductDesc,ProductSize,ProductPrice,ProductImage,ProductType")] Product product)
+        public async Task<IActionResult> Edit(int id, [Bind("ProductId,ProductName,ProductDesc,ProductSize,ProductPrice,ProductImage,ProductTypeId")] Product product)
         {
             if (id != product.ProductId)
             {
@@ -97,6 +132,7 @@ namespace GuniKitchen.Controllers
             {
                 try
                 {
+                    product.ProductImage = "images/" + product.ProductImage;
                     _context.Update(product);
                     await _context.SaveChangesAsync();
                 }
@@ -113,6 +149,7 @@ namespace GuniKitchen.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["ProductTypeId"] = new SelectList(_context.ProductTypes, "Id", "ProductTypes", product.ProductTypeId);
             return View(product);
         }
 
@@ -125,6 +162,7 @@ namespace GuniKitchen.Controllers
             }
 
             var product = await _context.Products
+                .Include(p => p.ProductType)
                 .FirstOrDefaultAsync(m => m.ProductId == id);
             if (product == null)
             {
@@ -149,5 +187,16 @@ namespace GuniKitchen.Controllers
         {
             return _context.Products.Any(e => e.ProductId == id);
         }
+
+        public async Task<IActionResult> Cart()
+        {
+            List<Product> products = HttpContext.Session.Get<List<Product>>("Products");
+            if (products == null)
+            {
+                products = new List<Product>();
+            }
+            return View(products);
+        }
+
     }
 }

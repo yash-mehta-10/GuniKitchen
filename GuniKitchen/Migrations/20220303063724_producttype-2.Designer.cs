@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GuniKitchen.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220302115324_product-3")]
-    partial class product3
+    [Migration("20220303063724_producttype-2")]
+    partial class producttype2
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -163,11 +163,13 @@ namespace GuniKitchen.Migrations
                         .HasColumnType("nvarchar(20)")
                         .HasColumnName("varchar");
 
-                    b.Property<string>("ProductType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("ProductTypeId")
+                        .HasColumnType("int");
 
                     b.HasKey("ProductId");
+
+                    b.HasIndex("ProductTypeId")
+                        .IsUnique();
 
                     b.ToTable("Products");
                 });
@@ -289,6 +291,17 @@ namespace GuniKitchen.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("GuniKitchen.Models.Product", b =>
+                {
+                    b.HasOne("GuniKitchen.Models.ProductType", "ProductType")
+                        .WithOne("Product")
+                        .HasForeignKey("GuniKitchen.Models.Product", "ProductTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ProductType");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
                 {
                     b.HasOne("GuniKitchen.Models.MyIdentityRole", null)
@@ -338,6 +351,11 @@ namespace GuniKitchen.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("GuniKitchen.Models.ProductType", b =>
+                {
+                    b.Navigation("Product");
                 });
 #pragma warning restore 612, 618
         }

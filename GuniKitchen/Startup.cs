@@ -67,10 +67,20 @@ namespace GuniKitchen
                     options.SlidingExpiration = true;
                 });
 
+            services.AddSession(options =>
+            {
+                options.Cookie.Name = ".AdventureWorks.Session";
+                options.IdleTimeout = TimeSpan.FromMinutes(20);
+                options.Cookie.IsEssential = true;
+            });
+
+
+
             services.AddRazorPages();
 
             services.AddSingleton<IEmailSender, MyEmailSender>();
         }
+
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -91,7 +101,7 @@ namespace GuniKitchen
             app.UseStaticFiles();
 
             app.UseRouting();
-
+            app.UseSession();
             app.UseAuthentication();
             app.UseAuthorization();
 
@@ -102,6 +112,11 @@ namespace GuniKitchen
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller}/{action=Index}/{id?}");
+
+                endpoints.MapControllerRoute(
+                    name: "areas",
+                    pattern: "{area=Customer}/{controller=Home}/{action=Index}/{id?}"
+                  );
             });
         }
     }

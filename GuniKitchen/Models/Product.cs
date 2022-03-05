@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using System;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -37,10 +36,9 @@ namespace GuniKitchen.Models
         public string ProductImage { get; set; }
 
         [Display(Name = "Product Type")]
-        [Required]
-        //[ForeignKey(nameof(Product.Types))]
-        public string ProductType { get; set; }
+        [ForeignKey("ProductTypeId")]
+        public int ProductTypeId { get; set; }
 
-        //public ProductType Types { get; set; }
+        public virtual ProductType ProductType { get; set; }
     }
 }

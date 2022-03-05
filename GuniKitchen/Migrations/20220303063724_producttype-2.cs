@@ -2,7 +2,7 @@
 
 namespace GuniKitchen.Migrations
 {
-    public partial class second : Migration
+    public partial class producttype2 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

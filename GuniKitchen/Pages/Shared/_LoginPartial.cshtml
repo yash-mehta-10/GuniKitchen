@@ -1,16 +1,39 @@
-﻿@using Microsoft.AspNetCore.Identity
+﻿@using GuniKitchen.Utility
+@using Microsoft.AspNetCore.Http
+@using Microsoft.AspNetCore.Identity
 @using GuniKitchen.Models
 @inject SignInManager<MyIdentityUser> SignInManager
 @inject UserManager<MyIdentityUser> UserManager
-
+@inject IHttpContextAccessor HttpContextAccessor
+@{
+    //var userRole = HttpContextAccessor.HttpContext.Session.GetString("roleName");
+    int count = 0;
+    List<Product> products = HttpContextAccessor.HttpContext.Session.Get<List<Product>>("products");
+    if (products==null)
+    {
+        products=new List<Product>();
+    }
+    count = products.Count();
+   
+}
 <ul class="navbar-nav">
 @if (SignInManager.IsSignedIn(User))
 { 
+    <li class="nav-item">
+                            <a class="nav-link text-dark" asp-controller="Products" asp-action="Cart">
+                                <i class="fas fa-shopping-cart"></i>
+                                (@count)
+                            </a>
+                        </li>
+
     <li class="nav-item">
         <a  class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity.Name!</a>
     </li>
     <li class="nav-item">
         <a  class="nav-link text-dark" asp-controller="Products" asp-action="Index" title="Products" >Products</a>
+    </li>
+    <li class="nav-item">
+        <a  class="nav-link text-dark" asp-controller="ProductTypes" asp-action="Index" title="ProductsTypes" >Products Type</a>
     </li>
     <li class="nav-item">
         <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post" >

@@ -9,7 +9,7 @@
 <h4>Product</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-8">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="ProductId" />
@@ -35,28 +35,26 @@
             </div>
             <div class="form-group">
                 <label asp-for="ProductImage" class="control-label"></label>
-                <input asp-for="ProductImage" class="form-control" />
+                <input asp-for="ProductImage" class="form-control" type="file"/>
                 <span asp-validation-for="ProductImage" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ProductType" class="control-label"></label>
-                <select asp-for="ProductType" class="form-control">
-                  <option value="Burger">Burger</option>
-                  <option value="Pizza">Pizza</option>
-                </select>
-                <span asp-validation-for="ProductType" class="text-danger"></span>
+                <label asp-for="ProductTypeId" class="control-label"></label>
+                <select asp-for="ProductTypeId" class="form-control" asp-items="ViewBag.ProductTypeId"></select>
+                <span asp-validation-for="ProductTypeId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </form>
     </div>
+    <div class="col-1"></div>
+        <div class="col-3">
+            <img src="~/@Model.ProductImage" width="100%" height="250px" style="border-radius: 5px;border: 1px solid #efefef"/>
+        </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index" class="btn btn-primary">Back to List</a>
 </div>
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}

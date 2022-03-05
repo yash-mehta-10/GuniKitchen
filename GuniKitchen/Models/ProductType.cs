@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace GuniKitchen.Models
@@ -7,12 +8,13 @@ namespace GuniKitchen.Models
     public class ProductType
     {
         public int Id { get; set; }
+        
 
         [Display(Name = "Product Type")]
         [Required]
         public string ProductTypes { get; set; }
 
 
-        //public Product Product { get; set; }
+        public virtual ICollection<Product> Product { get; set; }
     }
 }
